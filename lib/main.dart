@@ -1,122 +1,148 @@
 import 'package:flutter/material.dart';
+import 'package:fpf_project/screens/add_number_screen.dart';
+import 'package:fpf_project/screens/cat_fact_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'screens/add_task_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter To-Do App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: TaskListScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class TaskListScreen extends StatefulWidget {
+  const TaskListScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  TaskListScreenState createState() => TaskListScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class TaskListScreenState extends State<TaskListScreen> {
+  List<Map<String, String>> tasks = []; // Alterado para Map<String, String>
 
-  void _incrementCounter() {
+  @override
+  void initState() {
+    super.initState();
+    _loadTasks(); // Carregar as tarefas do SharedPreferences
+  }
+
+  // Carrega as tarefas do SharedPreferences
+  _loadTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final taskList = prefs.getStringList('tasks') ?? [];
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      tasks = taskList.map((task) {
+        final taskData = task.split(',');
+        return {
+          'name': taskData[0],  // Certificando-se que é String
+          'description': taskData.length > 1 ? taskData[1] : '',  // Descrição como String
+          'status': taskData.length > 2 ? taskData[2] : 'Pendente',  // Status como String
+        };
+      }).toList();
+    });
+  }
+
+  // Salva as tarefas no SharedPreferences
+  _saveTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final taskList = tasks.map((task) {
+      return '${task['name']},${task['description']},${task['status']}'; // Garantir que os dados são strings
+    }).toList();
+    prefs.setStringList('tasks', taskList);
+  }
+
+  // Alterna o status de uma tarefa
+  void _toggleTaskStatus(int index) {
+    setState(() {
+      tasks[index]['status'] = (tasks[index]['status'] == 'Pendente') ? 'Concluída' : 'Pendente';
+      _saveTasks(); // Salva as alterações no SharedPreferences
+    });
+  }
+
+  // Adiciona uma nova tarefa
+  void _addTask(String name, String? description) {
+    setState(() {
+      tasks.add({
+        'name': name,
+        'description': description ?? '', // Garantir que descrição seja uma String
+        'status': 'Pendente'
+      });
+      _saveTasks(); // Salva a lista de tarefas no SharedPreferences
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      appBar: AppBar(title: Text('Tarefas')),
+      body: ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(tasks[index]['name']!),
+            subtitle: Text('Status: ${tasks[index]['status']}'),
+            leading: Checkbox(
+              value: tasks[index]['status'] == 'Concluída',
+              checkColor: Colors.green,
+              onChanged: (bool? value) {
+                _toggleTaskStatus(index);  // Alterna o status da tarefa
+              },
             ),
-          ],
-        ),
+            onTap: () {
+              _toggleTaskStatus(index);  // Alterna o status da tarefa ao tocar na tarefa
+            },
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddTaskScreen(onSave: _addTask)),
+              );
+            },
+            child: Icon(Icons.add),
+          ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: () {
+              // Navegar para a página dos números
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddNumberScreen()),
+              );
+            },
+            child: Icon(Icons.functions),
+          ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: () {
+              // Navegar para a página dos gatos
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CatFactScreen()),
+              );
+            },
+            child: Icon(Icons.pets),
+          ),
+        ],
+      ),
     );
   }
 }
