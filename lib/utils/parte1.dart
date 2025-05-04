@@ -17,12 +17,4 @@ Map <String, int> analyzeList(List<int> numbers)
   };
  }
 
-void main() {
-List<int> numbers = [1, 2, 3, 4, 5];
-
-  final result = analyzeList(numbers);
-
-  print('The smallest number is: ${result['smallest']}');
-  print('The largest number is: ${result['largest']}');
-  print('The sum is: ${result['sum']}');
-}
+void main() {}
