@@ -1,38 +1,83 @@
-# FPF Tech - Flutter Project
+Desafio Técnico - FPF Tech - Flutter
+Visão Geral
+Este projeto tem como objetivo criar uma aplicação Flutter com funcionalidades de gerenciamento de tarefas, utilizando o Flutter para Web. Ele segue um processo de desenvolvimento dividido em várias etapas, sendo cada uma implementada e testada de forma incremental.
 
-## Descrição
+Passo 1 - Desenvolvimento de Funcionalidades de Gerenciamento de Tarefas
+O primeiro passo do projeto consistiu no desenvolvimento das funcionalidades de gerenciamento de tarefas, que incluem:
 
-Este projeto é uma aplicação Flutter que foi desenvolvida como parte do "Desafio Técnico FPF Tech - Flutter". O projeto consiste em três partes principais, que abordam o gerenciamento de tarefas e a integração com uma API pública.
+Adicionar novas tarefas: O usuário pode adicionar tarefas à lista com um nome e descrição opcional.
 
----
+Alterar o status das tarefas: As tarefas podem ser alternadas entre os status de "Pendente" e "Concluída".
 
-## Estrutura do Projeto
+Persistência das tarefas: As tarefas são salvas localmente usando o SharedPreferences, o que garante que as alterações feitas pelo usuário sejam persistidas entre as sessões.
 
-### Parte 1: Função para Análise de Lista
+Além disso, o Passo 1 incluiu a criação de testes unitários para garantir que as funcionalidades de gerenciamento de tarefas funcionem corretamente. A estrutura de testes foi implementada com o flutter_test e cobre as operações principais, como adição e alteração de status de tarefas.
 
-- Foi implementada uma função em Dart que recebe uma lista de números e retorna o menor número, o maior número e a soma dos números na lista.
-- A função foi testada utilizando o framework de testes do Dart.
-  
-### Parte 2: Interface do Usuário (Flutter)
+Passo 2 - Aplicação Flutter Web
+O segundo passo foi a criação da aplicação Flutter, que foi projetada para rodar diretamente no navegador. A aplicação inclui:
 
-- Foi criada uma aplicação Flutter com duas telas principais:
-  1. **Tela de Lista de Tarefas**: Mostra as tarefas em uma lista com a possibilidade de alternar o status da tarefa (Pendente/Concluída).
-  2. **Tela de Adição de Tarefas**: Permite o usuário adicionar novas tarefas com nome e descrição.
-- As tarefas são armazenadas localmente usando o pacote `shared_preferences`.
+Interface de usuário: Uma interface simples com lista de tarefas, onde o usuário pode ver o nome e o status de cada tarefa.
 
-  - **Funcionalidade**: 
-    - As tarefas podem ser marcadas como concluídas através de um botão de "check".
-    - A descrição da tarefa agora pode ser visualizada na tela de lista.
+Ações de navegação: Adição de tarefas em uma segunda página
 
-### Parte 3: Integração com API Pública
+Persistência no navegador: O uso do SharedPreferences para garantir que as tarefas sejam armazenadas e carregadas corretamente entre as sessões do navegador.
 
-- Foi implementada uma função para fazer uma requisição HTTP para a API pública [Cat Facts API](https://catfact.ninja/fact), que retorna um fato aleatório sobre gatos.
-- Um botão foi adicionado para permitir que o usuário carregue um novo fato.
-- A tela exibe um "loading" enquanto a requisição é feita, e possíveis erros, como falha de conexão, são tratados.
+A aplicação foi construída para ser responsiva e interativa, com foco em uma experiência fluida no navegador.
 
-  - **Funcionalidade**:
-    - A tela exibe um fato sobre gatos.
-    - O botão "Get New Fact" permite ao usuário carregar um novo fato de gato.
+Passo 3 - Interação com API
 
----
+No terceiro passo, a interação com a API foi adicionada junto da aplicação do Passo 2 para melhopr visualização dos dados.
 
+Por fim, os três passos foram integrados ao fluxo geral da aplicação, e a navegação agora permite ao usuário acessar facilmente todas as páginas.
+
+
+Como Inicializar o Projeto
+Pré-requisitos
+Certifique-se de ter o Flutter SDK instalado em seu sistema. Você pode baixá-lo aqui: Flutter SDK.
+
+Um navegador moderno, como Google Chrome, para rodar a aplicação Flutter Web.
+
+Editor de código (recomendado: Visual Studio Code ou Android Studio).
+
+Passo a Passo
+
+Clone o repositório:
+
+git clone https://github.com/edilsonribeirojr/fpfchallenge.git
+
+Navegue até o diretório do projeto:
+
+cd FPF_Project
+Instale as dependências:
+No diretório do projeto, execute o seguinte comando para instalar as dependências:
+
+flutter pub get
+
+Inicie o servidor da aplicação Flutter Web:
+
+Para rodar a aplicação no navegador, execute o seguinte comando:
+
+flutter run -d chrome
+
+A aplicação será aberta automaticamente no navegador padrão e estará pronta para ser utilizada.
+
+Testes Unitários
+
+Para garantir que todas as funcionalidades estejam funcionando corretamente, o projeto inclui testes unitários que validam a lógica do passo 1. Para rodar os testes:
+
+No diretório do projeto, execute:
+
+flutter test
+
+Os testes irão verificar a adição de tarefas, a alternância de status e a persistência no armazenamento local (SharedPreferences).
+
+Funcionalidades Implementadas
+
+Página de Tarefas: Exibe uma lista de tarefas com a possibilidade de adicionar, editar e alternar o status (Pendente/Concluída).
+
+Página de Números: Exibe informações sobre números específicos.
+
+Página de Gatos: Exibe curiosidades sobre gatos.
+
+Licença
+Este projeto está licenciado sob a Licença MIT.
