@@ -33,7 +33,7 @@ Por fim, os três passos foram integrados ao fluxo geral da aplicação, e a nav
 
 Como Inicializar o Projeto
 Pré-requisitos
-Certifique-se de ter o Flutter SDK instalado em seu sistema. Você pode baixá-lo aqui: Flutter SDK.
+Certifique-se de ter o Flutter SDK instalado em seu sistema.
 
 Um navegador moderno, como Google Chrome, para rodar a aplicação Flutter Web.
 
@@ -75,9 +75,9 @@ Funcionalidades Implementadas
 
 Página de Tarefas: Exibe uma lista de tarefas com a possibilidade de adicionar, editar e alternar o status (Pendente/Concluída).
 
-Página de Números: Exibe informações sobre números específicos.
+Página de Números: Executa função sobre lista de números.
 
-Página de Gatos: Exibe curiosidades sobre gatos.
+Página de Gatos: Exibe curiosidades sobre gatos em comunicação com API externa.
 
 Licença
 Este projeto está licenciado sob a Licença MIT.
