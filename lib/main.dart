@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/add_task_screen.dart';  // Certifique-se de que esse caminho está correto
+import 'screens/add_task_screen.dart';
+import 'screens/cat_fact_screen.dart'; // Adicionando o novo arquivo
 
 void main() {
   runApp(MyApp());
@@ -23,11 +24,12 @@ class TaskListScreen extends StatefulWidget {
   const TaskListScreen({super.key});
 
   @override
-  TaskListScreenState createState() => TaskListScreenState(); // Nome da classe foi alterado
+  _TaskListScreenState createState() => _TaskListScreenState();
 }
 
-class TaskListScreenState extends State<TaskListScreen> {  // Classe pública agora
-  List<Map<String, String?>> tasks = []; // A descrição pode ser nula
+class _TaskListScreenState extends State<TaskListScreen> {
+  List<Map<String, String>> tasks = [];
+  final List<Map<String, dynamic>> _tasks = [];
 
   @override
   void initState() {
@@ -35,43 +37,28 @@ class TaskListScreenState extends State<TaskListScreen> {  // Classe pública ag
     _loadTasks();
   }
 
-  Future<void> _loadTasks() async {
+  _loadTasks() async {
     final prefs = await SharedPreferences.getInstance();
     final taskList = prefs.getStringList('tasks') ?? [];
     setState(() {
       tasks = taskList.map((task) {
-        final parts = task.split(',');
+        final taskData = task.split(',');
         return {
-          'name': parts[0],
-          'status': parts.length > 1 ? parts[1] : 'Pendente',
-          'description': parts.length > 2 ? parts[2] : '',
+          'name': taskData[0],
+          'status': taskData[1],
         };
       }).toList();
     });
   }
 
-  Future<void> _addTask(String name, String? description) async {
-    final newTask = {
-      'name': name,
-      'status': 'Pendente',
-      'description': description ?? '',
-    };
+  void _addTask(String name, String? description) {
     setState(() {
-      tasks.add(newTask);
+      _tasks.add({
+        'name': name,
+        'description': description,
+        'isCompleted': false,
+      });
     });
-    final prefs = await SharedPreferences.getInstance();
-    final updatedList = tasks.map((t) => '${t['name']},${t['status']},${t['description']}').toList();
-    prefs.setStringList('tasks', updatedList);
-  }
-
-  void _toggleStatus(int index) async {
-    setState(() {
-      tasks[index]['status'] =
-          tasks[index]['status'] == 'Pendente' ? 'Concluída' : 'Pendente';
-    });
-    final prefs = await SharedPreferences.getInstance();
-    final updatedList = tasks.map((t) => '${t['name']},${t['status']},${t['description']}').toList();
-    prefs.setStringList('tasks', updatedList);
   }
 
   @override
@@ -83,39 +70,41 @@ class TaskListScreenState extends State<TaskListScreen> {  // Classe pública ag
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(tasks[index]['name']!),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Status: ${tasks[index]['status']}'),
-                if (tasks[index]['description'] != null && tasks[index]['description']!.isNotEmpty)
-                  Text('Descrição: ${tasks[index]['description']}'),
-              ],
-            ),
-            trailing: Checkbox(
-              value: tasks[index]['status'] == 'Concluída',
-              onChanged: (val) => _toggleStatus(index),
-              activeColor: Colors.green,
-            ),
+            subtitle: Text('Status: ${tasks[index]['status']}'),
             onTap: () {
               setState(() {
-                tasks[index]['status'] =
-                    tasks[index]['status'] == 'Pendente' ? 'Concluída' : 'Pendente';
+                tasks[index]['status'] = (tasks[index]['status'] == 'Pendente') ? 'Concluída' : 'Pendente';
+                final prefs = SharedPreferences.getInstance();
+                final taskList = tasks.map((task) => '${task['name']},${task['status']}').toList();
+                prefs.then((prefs) => prefs.setStringList('tasks', taskList));
               });
             },
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddTaskScreen(onSave: _addTask),
-            ),
-          );
-          _loadTasks(); // Recarrega a lista após voltar
-        },
-        child: Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddTaskScreen(onSave: _addTask)),
+              );
+            },
+            child: Icon(Icons.add),
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CatFactScreen()),
+              );
+            },
+            child: Icon(Icons.pets),
+          ),
+        ],
       ),
     );
   }
