@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CatFactScreen extends StatefulWidget {
+  const CatFactScreen({super.key});
+
   @override
   CatFactScreenState createState() => CatFactScreenState();
 }

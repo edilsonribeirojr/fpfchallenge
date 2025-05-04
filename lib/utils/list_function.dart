@@ -1,5 +1,4 @@
-Map <String, int> analyzeList(List<int> numbers)
- {
+Map<String, int> analyzeList(List<int> numbers) {
   int smallest = numbers[0];
   int largest = numbers[0];
   int sum = 0;
@@ -15,6 +14,6 @@ Map <String, int> analyzeList(List<int> numbers)
     'largest': largest,
     'sum': sum,
   };
- }
+}
 
 void main() {}

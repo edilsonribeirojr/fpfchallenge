@@ -1,57 +1,38 @@
-# Desafio Técnico FPF Tech - Flutter
+# FPF Tech - Flutter Project
 
-Este é o repositório para o Desafio Técnico FPF Tech - Flutter. O desafio foi dividido em quatro partes e, até agora, completamos as duas primeiras. O objetivo é criar uma aplicação Flutter para gerenciar tarefas, armazenar dados localmente e permitir a alternância de status entre "Pendente" e "Concluída".
+## Descrição
 
-## Parte 1: Lógica de Tarefas
+Este projeto é uma aplicação Flutter que foi desenvolvida como parte do "Desafio Técnico FPF Tech - Flutter". O projeto consiste em três partes principais, que abordam o gerenciamento de tarefas e a integração com uma API pública.
 
-A primeira parte consistiu em criar uma função que processa uma lista de tarefas, retornando:
+---
 
-- O menor número (menor tarefa em termos de ID).
-- O maior número (maior tarefa em termos de ID).
-- A soma de todos os números (soma dos IDs das tarefas).
+## Estrutura do Projeto
 
-Essa função foi criada com sucesso e testada, e a implementação está disponível no diretório `lib/utils`.
+### Parte 1: Função para Análise de Lista
 
-## Parte 2: Interface do Usuário
+- Foi implementada uma função em Dart que recebe uma lista de números e retorna o menor número, o maior número e a soma dos números na lista.
+- A função foi testada utilizando o framework de testes do Dart.
+  
+### Parte 2: Interface do Usuário (Flutter)
 
-Na segunda parte do desafio, a tarefa foi criar uma interface de usuário com Flutter para gerenciar tarefas, permitindo ao usuário:
-
-- Visualizar uma lista de tarefas.
-- Marcar as tarefas como "Concluída" ou "Pendente".
-- Adicionar novas tarefas.
-- Visualizar o nome e a descrição das tarefas.
-
-### Requisitos:
-- Tela Inicial: A tela exibe uma lista de tarefas mockadas (com nome e status). Cada tarefa possui uma checkbox que pode ser marcada para alternar entre "Concluída" e "Pendente".
-- Tela de Adição de Tarefa: O usuário pode adicionar novas tarefas, informando o nome da tarefa (obrigatório) e uma descrição (opcional).
-- O status das tarefas é atualizado de forma dinâmica ao clicar na checkbox.
-
-### Funcionalidade Adicional:
+- Foi criada uma aplicação Flutter com duas telas principais:
+  1. **Tela de Lista de Tarefas**: Mostra as tarefas em uma lista com a possibilidade de alternar o status da tarefa (Pendente/Concluída).
+  2. **Tela de Adição de Tarefas**: Permite o usuário adicionar novas tarefas com nome e descrição.
 - As tarefas são armazenadas localmente usando o pacote `shared_preferences`.
-- O status de cada tarefa pode ser alterado clicando na checkbox ao lado de cada tarefa, alternando entre "Pendente" e "Concluída".
 
-### Como rodar a aplicação:
-1. Execute o projeto com o comando:
+  - **Funcionalidade**: 
+    - As tarefas podem ser marcadas como concluídas através de um botão de "check".
+    - A descrição da tarefa agora pode ser visualizada na tela de lista.
 
-   ```bash
-   flutter run
-O aplicativo será iniciado em seu dispositivo ou emulador com a tela inicial, onde você poderá ver a lista de tarefas e interagir com a aplicação.
+### Parte 3: Integração com API Pública
 
-Instruções para rodar o projeto:
-Certifique-se de ter o Flutter instalado em sua máquina.
+- Foi implementada uma função para fazer uma requisição HTTP para a API pública [Cat Facts API](https://catfact.ninja/fact), que retorna um fato aleatório sobre gatos.
+- Um botão foi adicionado para permitir que o usuário carregue um novo fato.
+- A tela exibe um "loading" enquanto a requisição é feita, e possíveis erros, como falha de conexão, são tratados.
 
-Abra o terminal e navegue até o diretório do projeto.
+  - **Funcionalidade**:
+    - A tela exibe um fato sobre gatos.
+    - O botão "Get New Fact" permite ao usuário carregar um novo fato de gato.
 
-Use o comando flutter run para rodar o aplicativo.
+---
 
-Conclusão
-A primeira e segunda partes do desafio foram concluídas com sucesso. A aplicação agora permite gerenciar tarefas, visualizar suas descrições e alternar seu status de forma simples e eficiente.
-
-O projeto será expandido nas próximas partes, com mais funcionalidades e melhorias planejadas.
-
-Tecnologias Usadas
-Flutter: Framework para criar interfaces de usuário nativas.
-
-Dart: Linguagem usada para desenvolver o aplicativo.
-
-SharedPreferences: Armazenamento local de dados simples no dispositivo.
